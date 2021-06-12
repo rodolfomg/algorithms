@@ -4,21 +4,16 @@
 using namespace std;
 
 int binarySearch(const vector<int>& v, int value) {
-  int i = 0, f = v.size() - 1, m;
+  int start = 0, finish = v.size() - 1, middle;
 
-  while (f - i > 1) {
-    m = (i + f) / 2;
-
-    cout << "i: " << i << "\tm: " << m << "\tf: " << f << endl;
-
-    if (value == v[m]) return m;
-    if (value > v[m]) i = m;
-    if (value < v[m]) f = m;
+  while (finish - start > 1) {
+    middle = (start + finish) / 2;
+    if (value == v[middle]) return middle;
+    if (value > v[middle]) start = middle;
+    if (value < v[middle]) finish = middle;
   }
 
-  if (value == v[i]) return i;
-  if (value == v[f]) return f;
-
+  if (value == v[start]) return start;
   return -1;
 }
 

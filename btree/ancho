@@ -1,0 +1,63 @@
+template <typedef T>
+struct Node {
+  T value;
+  Node* left;
+  Node* right;
+};
+
+struct RNode {
+  RNode (const size_t& p, const size_t& l, Node* n) : pos(p), level(l), node(n) {}
+  size_t pos;
+  size_t level;
+  Node* node;
+};
+
+size_t findLevel(size_t pos) {
+  size_t level = 0;
+
+  while (pos > 1) {
+    pos /= 2;
+    level++;
+  }
+
+  return level;
+}
+
+size_t findLevel(size_t pos) {
+  if (1 == pos) return 0;
+  return findLevel(pos/2) + 1;
+}
+
+size_t findWidth (Node* root) {
+  if (nullptr == root) return 0;
+
+  size_t distance = 0, level = 0, hi = 1, hd = 1;
+  RNode r_node(1, 0, root);
+  queue<RNode> nodes;
+  nodes.emplace(r_node);
+
+  while (!nodes.empty()) {
+    r_node = nodes.front();
+    nodes.pop();
+
+    // New level, need to calculate distance
+    if (level < r_node.level) {
+      if (distance < hd - hi + 1) distance = hd - hi + 1;
+      level = r_node.level;
+      hi = r_node.pos;
+    }
+
+    hd = r_node.pos;
+
+    if (r_node.node->left) {
+      RNode left(r_node.pos * 2, level + 1, r_node.node->left);
+      nodes.emplace(left);
+    }
+    if (r_node.node->right) {
+      RNode right(r_node.pos * 2 + 1, level + 1, r_node.node->right);
+      nodes.emplace(right);
+    }
+  }
+
+  return distance;
+}

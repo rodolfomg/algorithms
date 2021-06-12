@@ -27,9 +27,12 @@ public:
   }
 
   AVLTree& print () {
+    cout << "inOrder (recursive): ";
     inOrder(_root);
-    cout << endl;
-    bfs();
+    cout << "\nMorrisTrasversal: ";
+    vector<int> values;
+    morrisTrasversal(_root, values);
+    for(auto value : values) cout << value << ' ';
     cout << endl << endl;
     return *this;
   }
@@ -143,6 +146,30 @@ private:
       current_node->right = insert_and_balance(current_node->right);
     }
   }
+
+  void morrisTrasversal (Node* current, vector<int>& result) {
+  Node* pre;
+
+  while (current != nullptr) {
+    if (!current->left) {
+      result.emplace_back(current->value);
+      current = current->right;
+    }
+    else {
+      pre = current->left;
+      while (pre->right && pre->right != current) pre = pre->right;
+      if (pre->right) {
+        result.emplace_back(current->value);
+        pre->right = nullptr;
+        current = current->right;
+      }
+      else {
+        pre->right = current;
+        current = current->left;
+      }
+    }
+  }
+}
 
   Node* _root;
 };

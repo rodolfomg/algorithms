@@ -57,8 +57,10 @@ private:
 
       if (current_node) {
         cout << current_node->value << ' ';
-        nodes.emplace(current_node->left);
-        nodes.emplace(current_node->right);
+        if (current_node->left || current_node->right) {
+          nodes.emplace(current_node->left);
+          nodes.emplace(current_node->right);
+        }
       }
       else {
         cout << "_ ";
